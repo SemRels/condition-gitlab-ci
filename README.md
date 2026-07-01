@@ -1,6 +1,6 @@
 # condition-gitlab-ci
 
-[![Latest Release](https://img.shields.io/github/v/release/SemRels/condition-gitlab-ci?label=version\&color=blue)](https://github.com/SemRels/condition-gitlab-ci/releases/latest)
+[![Latest Release](https://img.shields.io/github/v/release/SemRels/condition-gitlab-ci?label=version&color=blue)](https://github.com/SemRels/condition-gitlab-ci/releases/latest)
 
 Allows releases only when semrel is running inside GitLab CI.
 
