@@ -53,6 +53,24 @@ This plugin does not consume any `SEMREL_*` release context variables directly.
 
 The plugin checks the CI environment and succeeds when `GITLAB_CI=true`. Outside GitLab CI it exits non-zero to stop the release.
 
+## GitLab CI component
+
+In addition to the condition plugin binary above, this project ships a ready-to-use
+[GitLab CI/CD component](templates/release.yml) that wraps semrel in a single `release`
+job:
+
+```yaml
+include:
+  - remote: 'https://raw.githubusercontent.com/SemRels/condition-gitlab-ci/main/templates/release.yml'
+```
+
+Set a masked/protected `SEMREL_TOKEN` CI/CD variable, then push to your default branch.
+Supported inputs (`dry_run`, `config`, `stage`, `semrel_version`) are documented at the
+top of [`templates/release.yml`](templates/release.yml). Note: formal listing in the
+[GitLab CI/CD Catalog](https://docs.gitlab.com/ee/ci/components/) requires this project
+to also exist as a GitLab-hosted project with the Catalog feature enabled — the `remote:`
+include above works without that and needs no GitLab account on your side.
+
 ## License
 
 Apache-2.0
