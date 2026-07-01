@@ -1,0 +1,69 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: 2026 The condition-gitlab-ci Authors
+#
+# semrel GitLab CI release component.
+#
+# Usage (from any GitLab project's .gitlab-ci.yml):
+#
+#   include:
+#     - component: gitlab.com/SemRels/condition-gitlab-ci/release@~latest
+#       inputs:
+#         dry_run: "false"
+#
+# Or, until this project is mirrored on GitLab.com and published to the
+# CI/CD Catalog, include it directly by remote URL (works today, no catalog
+# listing required):
+#
+#   include:
+#     - remote: 'https://raw.githubusercontent.com/SemRels/condition-gitlab-ci/main/templates/release.yml'
+#
+# Required CI/CD variable:
+#   SEMREL_TOKEN — a token with permission to push tags/commits and create
+#                  releases on the hosting provider (set as a masked/protected
+#                  GitLab CI/CD variable).
+#
+# Optional CI/CD variables:
+#   SEMREL_DRY_RUN        — "true" to simulate the release without side effects (default: "false")
+#   SEMREL_CONFIG         — path to the semrel config file (default: ".semrel.yaml")
+#   SEMREL_REGISTRY_URL   — override the plugin registry URL (default: registry.semrel.io)
+#   SEMREL_VERSION        — pin the semrel CLI version to install (default: latest)
+
+spec:
+  inputs:
+    dry_run:
+      default: "false"
+      description: "Simulate the release without making any changes"
+    config:
+      default: ".semrel.yaml"
+      description: "Path to the semrel configuration file"
+    stage:
+      default: "release"
+      description: "Pipeline stage this job runs in"
+    semrel_version:
+      default: "latest"
+      description: "semrel CLI version to install (e.g. v0.22.0 or latest)"
+---
+
+release:
+  stage: $[[ inputs.stage ]]
+  image: golang:1.25-bookworm
+  rules:
+    # Mirrors the "push to main" trigger recommended for all semrel integrations.
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "push"'
+  variables:
+    SEMREL_DRY_RUN: "$[[ inputs.dry_run ]]"
+    SEMREL_CONFIG: "$[[ inputs.config ]]"
+    GIT_DEPTH: "0"
+  before_script:
+    - |
+      if [ "$[[ inputs.semrel_version ]]" = "latest" ]; then
+        go install github.com/SemRels/semrel/cmd/semrel@latest
+      else
+        go install "github.com/SemRels/semrel/cmd/semrel@$[[ inputs.semrel_version ]]"
+      fi
+  script:
+    - |
+      ARGS=""
+      if [ "$SEMREL_DRY_RUN" = "true" ]; then ARGS="--dry-run"; fi
+      if [ -n "$SEMREL_CONFIG" ]; then ARGS="$ARGS --config $SEMREL_CONFIG"; fi
+      "$(go env GOPATH)/bin/semrel" $ARGS release
