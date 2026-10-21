@@ -1,6 +1,10 @@
 # condition-gitlab-ci
 
 [![Latest Release](https://img.shields.io/github/v/release/SemRels/condition-gitlab-ci?label=version&color=blue)](https://github.com/SemRels/condition-gitlab-ci/releases/latest)
+[![CI](https://github.com/SemRels/condition-gitlab-ci/actions/workflows/ci.yml/badge.svg)](https://github.com/SemRels/condition-gitlab-ci/actions/workflows/ci.yml)
+[![License](https://img.shields.io/github/license/SemRels/condition-gitlab-ci)](LICENSE)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/SemRels/condition-gitlab-ci/badge)](https://scorecard.dev/viewer/?uri=github.com/SemRels/condition-gitlab-ci)
+[![REUSE status](https://api.reuse.software/badge/github.com/SemRels/condition-gitlab-ci)](https://api.reuse.software/info/github.com/SemRels/condition-gitlab-ci)
 
 Allows releases only when semrel is running inside GitLab CI.
 
