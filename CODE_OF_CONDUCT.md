@@ -1,6 +1,6 @@
 # Code of Conduct
 
-condition-gitlab-ci is committed to providing a welcoming and harassment-free community.
+`condition-gitlab-ci` is committed to providing a welcoming and harassment-free community.
 
 ## Our Pledge
 
